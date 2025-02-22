@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Testimonials from "../components/Testimonials"; // Import testimonials component
 import { motion } from "framer-motion";
 import { FiSun, FiMoon } from "react-icons/fi"; // Icons for dark mode toggle
+import { FaGlobe, FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 
 const Home = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -14,11 +15,12 @@ const Home = () => {
   const [darkMode, setDarkMode] = useState(false);
   
 
-  const handle_Subscribe = (e) => {
+  const handleSubscribe = (e) => {
     e.preventDefault();
     alert(`Thank you for subscribing, ${email}!`);
     setEmail(""); // Clear input after submission
   };
+  
 
    // Close dropdown when clicking outside
    useEffect(() => {
@@ -36,144 +38,142 @@ const Home = () => {
 
   
   
-    const handleSubscribe = (e) => {
-      e.preventDefault();
-      alert(`Thank you for subscribing, ${email}!`);
-      setEmail(""); // Clear input after submission
-    };
+  
   return (
     <div>
-    {/* Navigation Bar */}
-    <nav className={`fixed top-0 w-full z-50 ${darkMode ? "bg-gray-900" : "bg-white"} 
-        bg-opacity-80 backdrop-blur-md shadow-md transition-all duration-300`}>
-        
-        <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
-          
-          {/* Logo */}
-          <div className="flex items-center space-x-2">
-            <img src="/images/logo.jpg" alt="AgriAdapt Logo" className="w-10 h-10" />
-            <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-green-700"}`}>
-              AgriAdapt
-            </h1>
-          </div>
+{/* Navigation Bar */}
+<nav className={`fixed top-0 w-full z-50 ${darkMode ? "bg-gray-900" : "bg-white"} 
+    bg-opacity-80 backdrop-blur-md shadow-md transition-all duration-300`}>
 
-          {/* Desktop Search Bar */}
-          <div className="hidden md:flex bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 shadow-inner">
-            <input
-              type="text"
-              placeholder="🔍 Search farming tips..."
-              className="bg-transparent outline-none text-gray-700 dark:text-white w-64"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
 
-          {/* Desktop Navigation Menu */}
-          <ul className={`hidden md:flex space-x-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-            <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Home</li>
-            <li className="hover:text-green-500 cursor-pointer transition-all duration-300">About</li>
+      {/* Logo */}
+      <div className="flex items-center space-x-2">
+        <img src="/images/logo.jpg" alt="AgriAdapt Logo" className="w-10 h-10" />
+        <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-green-700"}`}>
+          AgriAdpt
+        </h1>
+      </div>
 
-            {/* Services Dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <li
-                className="hover:text-green-500 cursor-pointer transition-all duration-300 flex items-center"
-                onClick={() => setShowServices(!showServices)}
-              >
-                Services ⬇
-              </li>
-              {showServices && (
-                <motion.ul
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={`absolute ${darkMode ? "bg-gray-800" : "bg-white"} shadow-md mt-2 rounded-md p-2 space-y-2 z-10 w-48`}
-                >
-                  <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Soil & Crop Analysis</li>
-                  <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Smart Farming</li>
-                  <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Weather Forecast</li>
-                </motion.ul>
-              )}
-            </div>
+      {/* Search Bar (Now Visible in Mobile Too) */}
+      <div className="flex bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 shadow-inner w-64">
+        <input
+          type="text"
+          placeholder="🔍 Search farming tips..."
+          className="bg-transparent outline-none text-gray-700 dark:text-white w-full"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
 
-            <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Contact</li>
-          </ul>
+      {/* Desktop Navigation Menu */}
+      <ul className={`hidden md:flex space-x-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+        <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Home</li>
+        <li className="hover:text-green-500 cursor-pointer transition-all duration-300">About</li>
 
-          {/* Play Store Download Button */}
-          <a 
-            href="https://play.google.com/store/apps/details?id=com.agriadapt.app" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hidden md:flex items-center bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md 
-                      hover:bg-green-700 transition-all"
+        {/* Services Dropdown */}
+        <div className="relative" ref={dropdownRef}>
+          <li
+            className="hover:text-green-500 cursor-pointer transition-all duration-300 flex items-center"
+            onClick={() => setShowServices(!showServices)}
           >
-            📲 Get the App
-          </a>
-
-          {/* Dark Mode Toggle */}
-          <button onClick={() => setDarkMode(!darkMode)} className="hidden md:flex text-xl">
-            {darkMode ? <FiSun className="text-yellow-400" /> : <FiMoon className="text-gray-600" />}
-          </button>
-
-          {/* Mobile Menu Button */}
-          <button className="md:hidden text-green-600 text-2xl" onClick={() => setShowMenu(!showMenu)}>
-            ☰
-          </button>
+            Services ⬇
+          </li>
+          {showServices && (
+            <motion.ul
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className={`absolute ${darkMode ? "bg-gray-800 text-white" : "bg-white"} 
+                         shadow-md mt-2 rounded-md p-2 space-y-2 z-10 w-48`}
+            >
+              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">AI-Based Crop Monitoring</li>
+              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Water Management System</li>
+              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Climate Advisory & Pest Control</li>
+            </motion.ul>
+          )}
         </div>
 
-        {/* Mobile Navigation Menu */}
-        {showMenu && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className={`md:hidden ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-700"} 
-              space-y-3 p-4 shadow-md absolute w-full`}
+        <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Contact</li>
+      </ul>
+
+      {/* Play Store Download Button */}
+      <a 
+        href="https://play.google.com/store/apps/details?id=com.agriadapt.app" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="hidden md:flex items-center bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md 
+                  hover:bg-green-700 transition-all"
+      >
+        📲 Get the App
+      </a>
+
+      {/* Dark Mode Toggle */}
+      <button onClick={() => setDarkMode(!darkMode)} className="hidden md:flex text-xl">
+        {darkMode ? <FiSun className="text-yellow-400" /> : <FiMoon className="text-gray-600" />}
+      </button>
+
+      {/* Mobile Menu Button */}
+      <button className="md:hidden text-green-600 text-2xl" onClick={() => setShowMenu(!showMenu)}>
+        ☰
+      </button>
+    </div>
+
+    {/* Mobile Navigation Menu (Fixed Issues) */}
+    {showMenu && (
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        className={`md:hidden ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-700"} 
+          space-y-3 p-4 shadow-md absolute w-full`}
+      >
+        <li className="hover:text-green-500 cursor-pointer">Home</li>
+        <li className="hover:text-green-500 cursor-pointer">About</li>
+
+        {/* Services Dropdown for Mobile (Now Properly Styled) */}
+        <div className="relative">
+          <li
+            className="hover:text-green-500 cursor-pointer transition-all duration-300"
+            onClick={() => setShowServices(!showServices)}
           >
-            <li className="hover:text-green-500 cursor-pointer">Home</li>
-            <li className="hover:text-green-500 cursor-pointer">About</li>
-
-            {/* Services Dropdown for Mobile */}
-            <div className="relative">
-              <li
-                className="hover:text-green-500 cursor-pointer transition-all duration-300"
-                onClick={() => setShowServices(!showServices)}
-              >
-                Services ⬇
-              </li>
-              {showServices && (
-                <motion.ul
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-white shadow-md mt-2 rounded-md p-2 space-y-2 z-10"
-                >
-                  <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Soil & Crop Analysis</li>
-                  <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Smart Farming</li>
-                  <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Weather Forecast</li>
-                </motion.ul>
-              )}
-            </div>
-
-            <li className="hover:text-green-500 cursor-pointer">Contact</li>
-
-            {/* Play Store Button for Mobile */}
-            <a 
-              href="https://play.google.com/store/apps/details?id=com.agriadapt.app" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="block text-center bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md 
-                        hover:bg-green-700 transition-all"
+            Services ⬇
+          </li>
+          {showServices && (
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className={`bg-white dark:bg-gray-800 shadow-md mt-2 rounded-md p-2 space-y-2 z-10 w-full`}
             >
-              📲 Download App
-            </a>
+              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">AI-Based Crop Monitoring</li>
+              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Water Management System</li>
+              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Climate Advisory & Pest Control</li>
+            </motion.ul>
+          )}
+        </div>
 
-            {/* Dark Mode Toggle */}
-            <button onClick={() => setDarkMode(!darkMode)} className="w-full flex justify-center text-xl mt-3">
-              {darkMode ? <FiSun className="text-yellow-400" /> : <FiMoon className="text-gray-600" />}
-            </button>
-          </motion.div>
-        )}
-      </nav>
+        <li className="hover:text-green-500 cursor-pointer">Contact</li>
+
+        {/* Play Store Button for Mobile */}
+        <a 
+          href="https://play.google.com/store/apps/details?id=com.agriadapt.app" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="block text-center bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md 
+                    hover:bg-green-700 transition-all"
+        >
+          📲 Download App
+        </a>
+
+        {/* Dark Mode Toggle */}
+        <button onClick={() => setDarkMode(!darkMode)} className="w-full flex justify-center text-xl mt-3">
+          {darkMode ? <FiSun className="text-yellow-400" /> : <FiMoon className="text-gray-600" />}
+        </button>
+      </motion.div>
+    )}
+</nav>
+
 
 
 {/* Hero Section */}
@@ -181,25 +181,25 @@ const Home = () => {
   initial={{ opacity: 0, y: 50 }}
   animate={{ opacity: 1, y: 0 }}
   transition={{ duration: 1 }}
-  className="relative bg-cover bg-center h-[500px] flex items-center justify-center"
+  className="relative bg-cover bg-center min-h-screen flex items-center justify-center px-4 sm:px-8 text-center"
   style={{ backgroundImage: "url('/images/hero.jpg')" }}
 >
   {/* Overlay */}
   <div className="absolute inset-0 bg-gradient-to-r from-green-800 to-green-600 opacity-50"></div>
 
   {/* Content */}
-  <div className="relative z-10 text-white text-center px-4">
+  <div className="relative z-10 text-white max-w-3xl">
     <motion.h2
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 1 }}
-      className="text-5xl font-extrabold leading-tight drop-shadow-md"
+      className="text-4xl sm:text-5xl font-extrabold leading-tight drop-shadow-md"
     >
       Empowering Sri Lankan Farmers with Smart Agriculture
     </motion.h2>
 
-    <p className="mt-4 max-w-2xl text-lg">
-      AI-driven solutions and real-time insights for sustainable farming.
+    <p className="mt-4 text-lg sm:text-xl leading-relaxed text-wrap">
+    Boost yields, save water, and get real-time farming insights with AgriAdpt!
     </p>
 
     {/* CTA Buttons */}
@@ -223,34 +223,37 @@ const Home = () => {
   </div>
 </motion.section>
 
+
  {/* About Section */}
  <HomeContainer>
 
 
 
-    <section id="about" className="bg-gray-100 py-12 w-full">
-      <div className="w-full px-0">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center"
-        >
-          <h2 className="text-3xl font-bold text-green-700">About AgriAdapt</h2>
-          <p className="text-gray-600 mt-3 mx-auto max-w-5xl">
-            <strong>AgriAdapt</strong> is an intelligent **Smart Farming Advisory System** designed 
-            to **empower Sri Lankan farmers**. Using **real-time IoT sensors, AI-driven insights, 
-            and predictive weather models**, AgriAdapt helps farmers **optimize water use, 
-            plan crops efficiently, and mitigate risks from climate change**.
-          </p>
+ <section id="about" className="bg-gray-100 py-16 w-full">
+  <div className="max-w-6xl mx-auto px-6">
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="text-center"
+    >
+      {/* Heading */}
+      <h2 className="text-3xl sm:text-4xl font-extrabold text-green-700">
+        About <span className="text-green-600">AgriAdpt</span>
+      </h2>
 
-          {/* Image Section */}
-          {/* <img 
-            src="/images/agriadaptsystem.jpg" 
-            alt="AgriAdapt System Overview" 
-            className="mt-6 mx-auto rounded-lg shadow-lg w-full max-w-screen-xl"
-          /> */}
-        </motion.div>
+      {/* Description */}
+      <p className="text-gray-700 text-lg sm:text-xl leading-relaxed mt-6 mx-auto max-w-4xl sm:max-w-5xl px-4 sm:px-8">
+        <span className="font-semibold text-green-700">AgriAdpt</span> is a 
+        <span className="font-semibold text-green-700"> Smart Farming Advisory System</span>  
+        built to <span className="font-semibold text-green-700">empower Sri Lankan farmers.</span>  
+        With the help of <span className="font-semibold text-green-700">real-time IoT sensors, AI-driven insights, and predictive weather models,</span>  
+        AgriAdpt supports farmers in <span className="font-semibold text-green-700">optimizing water use, planning crops efficiently, and mitigating climate risks.</span>
+      </p>
+
+      {/* Visual Separator */}
+      <div className="mt-8 w-20 h-1 bg-green-500 mx-auto rounded-full"></div>
+    </motion.div>
 
         {/* Information Cards */}
         <div className="mt-8 grid md:grid-cols-3 gap-6 px-10">
@@ -282,7 +285,7 @@ const Home = () => {
           >
             <h3 className="text-xl font-semibold text-green-700">🚜 Our Mission</h3>
             <p className="text-gray-600 mt-2">
-              By integrating **IoT sensors, AI, and weather data**, AgriAdapt helps farmers 
+              By integrating **IoT sensors, AI, and weather data**, AgriAdpt helps farmers 
               optimize **water management, pest control, and resource efficiency**.
             </p>
           </motion.div>
@@ -290,7 +293,7 @@ const Home = () => {
 
         {/* Key Statistics */}
         <div className="mt-8 p-6 bg-green-700 text-white text-center rounded-lg shadow-lg w-full">
-          <h3 className="text-2xl font-bold">AgriAdapt Impact</h3>
+          <h3 className="text-2xl font-bold">AgriAdpt Impact</h3>
           <div className="flex flex-wrap justify-center gap-6 mt-4">
             <div>
               <h4 className="text-3xl font-bold">85%</h4>
@@ -310,7 +313,7 @@ const Home = () => {
         {/* Testimonial */}
         <div className="mt-12 text-center px-10">
           <blockquote className="text-xl italic text-gray-700 max-w-3xl mx-auto">
-            "AgriAdapt has transformed how I plan my irrigation schedule. Now I know 
+            "AgriAdpt has transformed how I plan my irrigation schedule. Now I know 
             exactly when to water my crops, saving me time and resources!"
           </blockquote>
           <p className="mt-2 text-green-700 font-semibold">- Farmer in North Central Sri Lanka</p>
@@ -327,7 +330,7 @@ const Home = () => {
             >
               <h3 className="text-2xl font-semibold text-green-700">How It Works</h3>
               <p className="text-gray-600 mt-2">
-                AgriAdapt integrates **real-time water level monitoring**, **weather forecasting**, 
+                AgriAdpt integrates **real-time water level monitoring**, **weather forecasting**, 
                 and **AI-driven advisories** to help farmers **make informed decisions**. The system 
                 collects data from **IoT sensors**, combines it with **weather predictions**, and 
                 delivers personalized farming advice through a **mobile application**.
@@ -359,7 +362,7 @@ const Home = () => {
         {/* Section Title */}
         <h2 className="text-4xl font-extrabold text-green-700 mb-6">Our Services</h2>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-12">
-          AgriAdapt provides **AI-driven agricultural solutions** to enhance 
+          AgriAdpt provides **AI-driven agricultural solutions** to enhance 
           **climate resilience, water management, and precision farming** for Sri Lankan farmers.
         </p>
 
@@ -445,7 +448,7 @@ const Home = () => {
             <h3 className="text-xl font-bold mt-4">Mobile App for Farmers</h3>
             <p className="text-gray-600 mt-2">
               Provides **real-time water level alerts, AI-driven irrigation recommendations,** 
-              and **weather-based advisories** in **Sinhala and Tamil**.
+              and **weather-based advisories** in **Sinhala, English and Tamil**.
             </p>
           </motion.div>
         </div>
@@ -466,7 +469,7 @@ const Home = () => {
     
     {/* Subtitle */}
     <p className="mt-4 text-lg max-w-2xl mx-auto opacity-90">
-      Join thousands of Sri Lankan farmers using AgriAdapt’s **AI-powered insights** 
+      Join thousands of Sri Lankan farmers using AgriAdpt’s **AI-powered insights** 
       to **maximize crop yields, optimize water use, and adapt to climate changes**. 
       Whether you manage **paddy fields, vegetable farms, or tea plantations**, 
       we’ve got you covered!
@@ -484,118 +487,118 @@ const Home = () => {
 
     {/* Additional Info */}
     <p className="mt-3 text-sm opacity-80">
-      💡 **100% Free for Farmers** | 📲 **Available in Sinhala & Tamil**
+      💡 **100% Free for Farmers** | 📲 **Available in Sinhala, English & Tamil**
     </p>
   </div>
 </section>
 
 
 
+{/* Footer Section */}
+<footer className="bg-gray-900 text-white py-12">
+  <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-6">
+    
+    {/* Quick Links */}
+    <div>
+      <h4 className="text-lg font-bold text-green-400">Quick Links</h4>
+      <ul className="mt-2 space-y-2 text-sm text-gray-300">
+        <li><a href="/" className="hover:text-green-300 transition">🏡 Home</a></li>
+        <li><a href="/about" className="hover:text-green-300 transition">📖 About</a></li>
+        <li><a href="/services" className="hover:text-green-300 transition">🌱 Services</a></li>
+        <li><a href="/contact" className="hover:text-green-300 transition">📞 Contact</a></li>
+      </ul>
+    </div>
 
-      {/* Footer Section */}
-      <footer className="bg-gray-900 text-white py-12">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 px-6">
-        
-        {/* About Section */}
-        <div>
-          <h4 className="text-lg font-bold text-green-400">About AgriAdapt</h4>
-          <p className="mt-2 text-sm text-gray-300">
-            **AI-powered Smart Farming Solutions** for **Sri Lankan farmers**. 
-            Helping you **optimize crops, conserve water, and increase yields**.
-          </p>
-        </div>
+    {/* Sri Lankan Agricultural Support */}
+    <div>
+      <h4 className="text-lg font-bold text-green-400">Agriculture Support</h4>
+      <ul className="mt-2 space-y-2 text-sm text-gray-300">
+        <li>
+          <a href="https://www.doa.gov.lk" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
+            🌾 Sri Lanka Dept. of Agriculture
+          </a>
+        </li>
+        <li>
+          <a href="https://www.narasrilanka.org" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
+            🔬 National Agricultural Research
+          </a>
+        </li>
+        <li>
+          <a href="https://www.fao.org/srilanka" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
+            🌍 FAO Sri Lanka
+          </a>
+        </li>
+        <li>
+          <a href="https://www.gov.lk" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
+            🏛 Govt. Agri Support
+          </a>
+        </li>
+      </ul>
+    </div>
 
-        {/* Quick Links */}
-        <div>
-          <h4 className="text-lg font-bold text-green-400">Quick Links</h4>
-          <ul className="mt-2 space-y-2 text-sm text-gray-300">
-            <li><a href="/" className="hover:text-green-300 transition">🏡 Home</a></li>
-            <li><a href="/about" className="hover:text-green-300 transition">📖 About</a></li>
-            <li><a href="/services" className="hover:text-green-300 transition">🌱 Services</a></li>
-            <li><a href="/contact" className="hover:text-green-300 transition">📞 Contact</a></li>
-          </ul>
-        </div>
-
-        {/* Sri Lankan Agricultural Support */}
-        <div>
-          <h4 className="text-lg font-bold text-green-400">Agriculture Support</h4>
-          <ul className="mt-2 space-y-2 text-sm text-gray-300">
-            <li>
-              <a href="https://www.doa.gov.lk" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
-                🌾 Sri Lanka Dept. of Agriculture
-              </a>
-            </li>
-            <li>
-              <a href="https://www.narasrilanka.org" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
-                🔬 National Agricultural Research
-              </a>
-            </li>
-            <li>
-              <a href="https://www.fao.org/srilanka" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
-                🌍 FAO Sri Lanka
-              </a>
-            </li>
-            <li>
-              <a href="https://www.gov.lk" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition">
-                🏛 Govt. Agri Support
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        {/* Newsletter Subscription */}
-        <div>
-          <h4 className="text-lg font-bold text-green-400">📩 Subscribe for Updates</h4>
-          <form onSubmit={handleSubscribe} className="mt-3 flex flex-col">
-            <input 
-              type="email" 
-              placeholder="Enter your email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="p-2 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
-            <button 
-              type="submit" 
-              className="mt-3 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 rounded-md transition-all"
-            >
-              ✅ Subscribe
-            </button>
-          </form>
-          <p className="mt-2 text-sm opacity-80">
-            📢 Get the latest farming insights, weather alerts & smart farming tips!
-          </p>
-        </div>
-      </div>
-
-      {/* Social Media & Live Chat */}
-      <div className="text-center mt-10">
-        <h4 className="text-lg font-bold text-green-400">Follow Us</h4>
-        <div className="flex justify-center space-x-6 mt-4 text-lg">
-          <a href="#" className="hover:text-green-300 transition">🌍 Website</a>
-          <a href="#" className="hover:text-green-300 transition">📘 Facebook</a>
-          <a href="#" className="hover:text-green-300 transition">📷 Instagram</a>
-          <a href="#" className="hover:text-green-300 transition">🐦 Twitter</a>
-        </div>
-      </div>
-
-      {/* Live Chat Support Button */}
-      <div className="fixed bottom-6 right-6">
-        <button className="bg-green-500 text-white px-5 py-3 rounded-full shadow-lg 
-                           hover:bg-green-600 transition flex items-center space-x-2"
-          onClick={() => alert('Live Chat Support Coming Soon!')}
+    {/* Newsletter Subscription */}
+    <div>
+      <h4 className="text-lg font-bold text-green-400">📩 Subscribe for Updates</h4>
+      <form onSubmit={handleSubscribe} className="mt-3 flex flex-col sm:flex-row items-center gap-3 w-full">
+        <input 
+          type="email" 
+          placeholder="Enter your email" 
+          value={email} 
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="p-3 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-green-400 w-full sm:flex-1"
+        />
+        <button 
+          type="submit" 
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-md transition-all w-full sm:w-auto flex items-center justify-center"
         >
-          💬 Chat with Us
+          ✅ Subscribe
         </button>
-      </div>
+      </form>
+      <p className="mt-2 text-sm opacity-80 text-center sm:text-left">
+        📢 Get the latest farming insights, weather alerts & smart farming tips!
+      </p>
+    </div>
 
-      {/* Bottom Copyright & Terms */}
-      <div className="text-center text-gray-400 text-sm mt-8 border-t border-gray-700 pt-4">
-        © 2025 AgriAdapt. All rights reserved. | 
-        <a href="/privacy" className="hover:text-green-300 transition"> Privacy Policy </a> | 
-        <a href="/terms" className="hover:text-green-300 transition"> Terms of Service </a>
+    {/* Social Media & Live Chat */}
+    <div>
+      <h4 className="text-lg font-bold text-green-400">Follow Us</h4>
+      <div className="flex flex-col space-y-2 mt-3 text-sm text-gray-300">
+        <a href="#" className="hover:text-green-300 transition flex items-center gap-2">
+          <FaGlobe className="text-2xl" /> Website
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition flex items-center gap-2">
+          <FaFacebookF className="text-2xl" /> Facebook
+        </a>
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition flex items-center gap-2">
+          <FaInstagram className="text-2xl" /> Instagram
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-green-300 transition flex items-center gap-2">
+          <FaTwitter className="text-2xl" /> Twitter
+        </a>
       </div>
-    </footer>
+    </div>
+  </div>
+
+  {/* Live Chat Support Button */}
+  <div className="fixed bottom-6 right-6">
+    <button className="bg-green-500 text-white px-5 py-3 rounded-full shadow-lg 
+                       hover:bg-green-600 transition flex items-center space-x-2"
+      onClick={() => alert('Live Chat Support Coming Soon!')}
+    >
+      💬 Chat with Us
+    </button>
+  </div>
+
+  {/* Bottom Copyright & Terms */}
+  <div className="text-center text-gray-400 text-sm mt-8 border-t border-gray-700 pt-4">
+    © 2025 AgriAdpt. All rights reserved. | 
+    <a href="/privacy" className="hover:text-green-300 transition"> Privacy Policy </a> | 
+    <a href="/terms" className="hover:text-green-300 transition"> Terms of Service </a>
+  </div>
+</footer>
+
+
 
     </div>
   );
