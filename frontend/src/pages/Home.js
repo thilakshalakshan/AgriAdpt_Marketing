@@ -3,16 +3,28 @@ import styled from "styled-components";
 import Testimonials from "../components/Testimonials"; // Import testimonials component
 import { motion } from "framer-motion";
 import { FiSun, FiMoon } from "react-icons/fi"; // Icons for dark mode toggle
+import { FiSearch } from "react-icons/fi"; // Import Search Icon
+import { FaBars } from "react-icons/fa";
 import { FaGlobe, FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 
+
+const pageVariants = {
+  initial: { opacity: 0, y: 50 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  exit: { opacity: 0, y: -50, transition: { duration: 0.3, ease: "easeIn" } },
+};
+
+// ✅ Move the function definition **before return**
 const Home = () => {
-  const [showMenu, setShowMenu] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showServices, setShowServices] = useState(false);
-  const [showMore, setShowMore] = useState(false);
-  const dropdownRef = useRef(null);
-  const [email, setEmail] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const [email, setEmail] = useState(""); // Manages input in the Subscribe form
+  const [showMore, setShowMore] = useState(false); // Manages "Learn More" section visibility
+  const [showSearch, setShowSearch] = useState(false); // Manages search bar visibility
+  const [searchTerm, setSearchTerm] = useState(""); // Manages search input value
+  const [showServices, setShowServices] = useState(false); // Manages services dropdown
+  const [showMenu, setShowMenu] = useState(false); // Manages mobile menu
+  const [darkMode, setDarkMode] = useState(false); // Manages dark mode toggle
+  const dropdownRef = useRef(null); // Reference for services dropdown
+const searchRef = useRef(null); // Reference for search bar
   
 
   const handleSubscribe = (e) => {
@@ -28,6 +40,9 @@ const Home = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowServices(false);
       }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowSearch(false); // Close search bar when clicking outside
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -40,139 +55,141 @@ const Home = () => {
   
   
   return (
+    <motion.div
+    initial="initial"
+    animate="animate"
+    exit="exit"
+    variants={pageVariants}
+  >
+   
     <div>
 {/* Navigation Bar */}
 <nav className={`fixed top-0 w-full z-50 ${darkMode ? "bg-gray-900" : "bg-white"} 
-    bg-opacity-80 backdrop-blur-md shadow-md transition-all duration-300`}>
+        bg-opacity-80 backdrop-blur-md shadow-md transition-all duration-300`}>
 
-    <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+      {/* Navbar Container */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
 
-      {/* Logo */}
-      <div className="flex items-center space-x-2">
-        <img src="/images/logo.jpg" alt="AgriAdapt Logo" className="w-10 h-10" />
-        <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-green-700"}`}>
-          AgriAdpt
-        </h1>
-      </div>
-
-      {/* Search Bar (Now Visible in Mobile Too) */}
-      <div className="flex bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2 shadow-inner w-64">
-        <input
-          type="text"
-          placeholder="🔍 Search farming tips..."
-          className="bg-transparent outline-none text-gray-700 dark:text-white w-full"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      {/* Desktop Navigation Menu */}
-      <ul className={`hidden md:flex space-x-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-        <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Home</li>
-        <li className="hover:text-green-500 cursor-pointer transition-all duration-300">About</li>
-
-        {/* Services Dropdown */}
-        <div className="relative" ref={dropdownRef}>
-          <li
-            className="hover:text-green-500 cursor-pointer transition-all duration-300 flex items-center"
-            onClick={() => setShowServices(!showServices)}
-          >
-            Services ⬇
-          </li>
-          {showServices && (
-            <motion.ul
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              className={`absolute ${darkMode ? "bg-gray-800 text-white" : "bg-white"} 
-                         shadow-md mt-2 rounded-md p-2 space-y-2 z-10 w-48`}
-            >
-              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">AI-Based Crop Monitoring</li>
-              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Water Management System</li>
-              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Climate Advisory & Pest Control</li>
-            </motion.ul>
-          )}
+        {/* Logo */}
+        <div className="flex items-center space-x-2">
+          <img src="/images/logo.jpg" alt="AgriAdapt Logo" className="w-10 h-10" />
+          <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-green-700"}`}>
+            AgriAdpt
+          </h1>
         </div>
 
-        <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Contact</li>
-      </ul>
-
-      {/* Play Store Download Button */}
-      <a 
-        href="https://play.google.com/store/apps/details?id=com.agriadapt.app" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="hidden md:flex items-center bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md 
-                  hover:bg-green-700 transition-all"
-      >
-        📲 Get the App
-      </a>
-
-      {/* Dark Mode Toggle */}
-      <button onClick={() => setDarkMode(!darkMode)} className="hidden md:flex text-xl">
-        {darkMode ? <FiSun className="text-yellow-400" /> : <FiMoon className="text-gray-600" />}
-      </button>
-
-      {/* Mobile Menu Button */}
-      <button className="md:hidden text-green-600 text-2xl" onClick={() => setShowMenu(!showMenu)}>
-        ☰
-      </button>
-    </div>
-
-    {/* Mobile Navigation Menu (Fixed Issues) */}
-    {showMenu && (
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className={`md:hidden ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-700"} 
-          space-y-3 p-4 shadow-md absolute w-full`}
-      >
-        <li className="hover:text-green-500 cursor-pointer">Home</li>
-        <li className="hover:text-green-500 cursor-pointer">About</li>
-
-        {/* Services Dropdown for Mobile (Now Properly Styled) */}
-        <div className="relative">
-          <li
-            className="hover:text-green-500 cursor-pointer transition-all duration-300"
-            onClick={() => setShowServices(!showServices)}
-          >
-            Services ⬇
-          </li>
-          {showServices && (
-            <motion.ul
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className={`bg-white dark:bg-gray-800 shadow-md mt-2 rounded-md p-2 space-y-2 z-10 w-full`}
-            >
-              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">AI-Based Crop Monitoring</li>
-              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Water Management System</li>
-              <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Climate Advisory & Pest Control</li>
-            </motion.ul>
-          )}
+        {/* Search Bar (Desktop) */}
+        <div className="relative flex-grow max-w-md hidden sm:flex justify-center items-center">
+          <input
+            type="text"
+            placeholder="Search farming tips..."
+            className="w-full bg-white dark:bg-gray-700 rounded-full px-4 py-2 shadow-md border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-white focus:ring-2 focus:ring-green-500 focus:outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <FiSearch className="absolute right-3 text-gray-500 dark:text-gray-300 text-xl cursor-pointer" />
         </div>
 
-        <li className="hover:text-green-500 cursor-pointer">Contact</li>
-
-        {/* Play Store Button for Mobile */}
-        <a 
-          href="https://play.google.com/store/apps/details?id=com.agriadapt.app" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="block text-center bg-green-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md 
-                    hover:bg-green-700 transition-all"
+        {/* Mobile Search Button */}
+        <button
+          className="sm:hidden text-gray-600 dark:text-white text-xl"
+          onClick={() => setShowSearch(!showSearch)}
         >
-          📲 Download App
-        </a>
+          <FiSearch />
+        </button>
+
+        {/* Mobile Search Input */}
+        {showSearch && (
+          <div ref={searchRef} className="absolute top-14 left-0 w-full px-4">
+            <input
+              type="text"
+              placeholder="Search farming tips..."
+              className="w-full bg-white dark:bg-gray-700 rounded-full px-4 py-2 shadow-md border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-white focus:ring-2 focus:ring-green-500 focus:outline-none"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <FiSearch className="absolute right-5 top-3 text-gray-500 dark:text-gray-300 text-xl cursor-pointer" />
+          </div>
+        )}
+
+        {/* Desktop Navigation */}
+        <ul className={`hidden md:flex space-x-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+          <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Home</li>
+          <li className="hover:text-green-500 cursor-pointer transition-all duration-300">About</li>
+
+          {/* Services Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <li
+              className="hover:text-green-500 cursor-pointer transition-all duration-300 flex items-center"
+              onClick={() => setShowServices(!showServices)}
+            >
+              Services ⬇
+            </li>
+            {showServices && (
+              <motion.ul
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`absolute left-0 w-52 rounded-md p-2 shadow-lg z-50 ${
+                  darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-700"
+                }`}
+              >
+                <li className="hover:text-green-400 px-3 py-2 cursor-pointer">AI-Based Crop Monitoring</li>
+                <li className="hover:text-green-400 px-3 py-2 cursor-pointer">Water Management System</li>
+                <li className="hover:text-green-400 px-3 py-2 cursor-pointer">Climate Advisory & Pest Control</li>
+              </motion.ul>
+            )}
+          </div>
+
+          <li className="hover:text-green-500 cursor-pointer transition-all duration-300">Contact</li>
+        </ul>
 
         {/* Dark Mode Toggle */}
-        <button onClick={() => setDarkMode(!darkMode)} className="w-full flex justify-center text-xl mt-3">
+        <button onClick={() => setDarkMode(!darkMode)} className="hidden md:flex text-xl">
           {darkMode ? <FiSun className="text-yellow-400" /> : <FiMoon className="text-gray-600" />}
         </button>
-      </motion.div>
-    )}
-</nav>
+
+        {/* Mobile Menu Button */}
+        <button className="md:hidden text-green-600 text-2xl" onClick={() => setShowMenu(!showMenu)}>
+          <FaBars />
+        </button>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {showMenu && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className={`md:hidden ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-700"} space-y-3 p-4 shadow-md absolute w-full`}
+        >
+          <li className="hover:text-green-500 cursor-pointer">Home</li>
+          <li className="hover:text-green-500 cursor-pointer">About</li>
+
+          {/* Services Dropdown for Mobile */}
+          <div className="relative">
+            <li className="hover:text-green-500 cursor-pointer transition-all duration-300" onClick={() => setShowServices(!showServices)}>
+              Services ⬇
+            </li>
+            {showServices && (
+              <motion.ul
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                className="bg-white dark:bg-gray-800 shadow-md mt-2 rounded-md p-2 space-y-2 z-10 w-full"
+              >
+                <li className="hover:text-green-600 px-3 py-1 cursor-pointer">AI-Based Crop Monitoring</li>
+                <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Water Management System</li>
+                <li className="hover:text-green-600 px-3 py-1 cursor-pointer">Climate Advisory & Pest Control</li>
+              </motion.ul>
+            )}
+          </div>
+
+          <li className="hover:text-green-500 cursor-pointer">Contact</li>
+        </motion.div>
+      )}
+    </nav>
+
 
 
 
@@ -199,97 +216,106 @@ const Home = () => {
     </motion.h2>
 
     <p className="mt-4 text-lg sm:text-xl leading-relaxed text-wrap">
-    Boost yields, save water, and get real-time farming insights with AgriAdpt!
+      Boost yields, save water, and get real-time farming insights with AgriAdpt!
     </p>
 
     {/* CTA Buttons */}
-    <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+    <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
       <motion.button
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
-        className="bg-gradient-to-r from-green-500 to-green-700 text-white px-8 py-3 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl flex items-center gap-2"
+        className="bg-gradient-to-r from-green-500 to-green-700 text-white px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-semibold rounded-full shadow-md hover:shadow-lg flex items-center gap-2 w-full sm:w-auto max-w-xs"
       >
         🌱 Learn More
       </motion.button>
 
       <motion.button
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
-        className="bg-white text-green-700 px-6 py-3 text-lg font-semibold rounded-full shadow-lg hover:bg-gray-100 flex items-center gap-2"
+        className="bg-white text-green-700 px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg font-semibold rounded-full shadow-md hover:bg-gray-100 flex items-center gap-2 w-full sm:w-auto max-w-xs"
       >
         📞 Contact Experts
       </motion.button>
     </div>
   </div>
-</motion.section>
+</motion.section> {/* ✅ Closing tag added here */}
 
 
  {/* About Section */}
  <HomeContainer>
-
-
-
- <section id="about" className="bg-gray-100 py-16 w-full">
-  <div className="max-w-6xl mx-auto px-6">
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="text-center"
-    >
-      {/* Heading */}
-      <h2 className="text-3xl sm:text-4xl font-extrabold text-green-700">
+  <section id="about" className="bg-gray-100 py-16 w-full">
+    <div className="max-w-6xl mx-auto px-6 text-center">
+      {/* Section Title */}
+      <motion.h2
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-4xl sm:text-5xl font-extrabold text-green-700 leading-tight"
+      >
         About <span className="text-green-600">AgriAdpt</span>
-      </h2>
+      </motion.h2>
 
-      {/* Description */}
-      <p className="text-gray-700 text-lg sm:text-xl leading-relaxed mt-6 mx-auto max-w-4xl sm:max-w-5xl px-4 sm:px-8">
-        <span className="font-semibold text-green-700">AgriAdpt</span> is a 
+      {/* Section Subtitle */}
+      <motion.p
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-gray-700 text-lg sm:text-xl leading-relaxed mt-4 max-w-3xl mx-auto px-4 sm:px-8"
+      >
+        <span className="font-semibold text-green-700">AgriAdpt</span> is a
         <span className="font-semibold text-green-700"> Smart Farming Advisory System</span>  
-        built to <span className="font-semibold text-green-700">empower Sri Lankan farmers.</span>  
-        With the help of <span className="font-semibold text-green-700">real-time IoT sensors, AI-driven insights, and predictive weather models,</span>  
-        AgriAdpt supports farmers in <span className="font-semibold text-green-700">optimizing water use, planning crops efficiently, and mitigating climate risks.</span>
-      </p>
+        designed to <span className="font-semibold text-green-700">empower Sri Lankan farmers.</span>  
+        Using <span className="font-semibold text-green-700">real-time IoT sensors, AI-driven insights, and predictive weather models,</span>  
+        we help farmers <span className="font-semibold text-green-700">optimize water use, plan crops efficiently, and mitigate climate risks.</span>
+      </motion.p>
 
       {/* Visual Separator */}
-      <div className="mt-8 w-20 h-1 bg-green-500 mx-auto rounded-full"></div>
-    </motion.div>
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 0.8 }}
+        className="mt-6 w-16 h-1 bg-green-500 mx-auto rounded-full"
+      ></motion.div>
+    </div>
 
-        {/* Information Cards */}
-        <div className="mt-8 grid md:grid-cols-3 gap-6 px-10">
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
-            className="bg-white p-6 rounded-lg shadow-md"
-          >
-            <h3 className="text-xl font-semibold text-green-700">🌱 Our Aim</h3>
-            <p className="text-gray-600 mt-2">
-              We aim to provide **data-driven tools** that enhance **sustainable farming practices**, 
-              helping farmers **adapt to climate challenges**.
-            </p>
-          </motion.div>
+    {/* Information Cards Section */}
+    <div className="mt-12 grid md:grid-cols-3 gap-6 px-6 sm:px-10">
+      <motion.div 
+        whileHover={{ scale: 1.05 }} 
+        className="bg-white p-6 rounded-lg shadow-md text-center flex flex-col items-center"
+      >
+        <span className="text-green-500 text-4xl">🌱</span>
+        <h3 className="text-xl font-semibold text-green-700 mt-3">Our Aim</h3>
+        <p className="text-gray-600 mt-2">
+          Providing **data-driven tools** to enhance **sustainable farming practices** and **help farmers adapt to climate challenges**.
+        </p>
+      </motion.div>
 
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
-            className="bg-white p-6 rounded-lg shadow-md"
-          >
-            <h3 className="text-xl font-semibold text-green-700">🌍 Our Vision</h3>
-            <p className="text-gray-600 mt-2">
-              <em>"Empowering farmers with smart, sustainable solutions to ensure 
-              resilience in Sri Lanka’s agriculture."</em>
-            </p>
-          </motion.div>
+      <motion.div 
+        whileHover={{ scale: 1.05 }} 
+        className="bg-white p-6 rounded-lg shadow-md text-center flex flex-col items-center"
+      >
+        <span className="text-blue-500 text-4xl">🌍</span>
+        <h3 className="text-xl font-semibold text-green-700 mt-3">Our Vision</h3>
+        <p className="text-gray-600 mt-2">
+          "Empowering farmers with smart, sustainable solutions to ensure **resilience in Sri Lanka’s agriculture**."
+        </p>
+      </motion.div>
 
-          <motion.div 
-            whileHover={{ scale: 1.05 }} 
-            className="bg-white p-6 rounded-lg shadow-md"
-          >
-            <h3 className="text-xl font-semibold text-green-700">🚜 Our Mission</h3>
-            <p className="text-gray-600 mt-2">
-              By integrating **IoT sensors, AI, and weather data**, AgriAdpt helps farmers 
-              optimize **water management, pest control, and resource efficiency**.
-            </p>
-          </motion.div>
-        </div>
+      <motion.div 
+        whileHover={{ scale: 1.05 }} 
+        className="bg-white p-6 rounded-lg shadow-md text-center flex flex-col items-center"
+      >
+        <span className="text-orange-500 text-4xl">🚜</span>
+        <h3 className="text-xl font-semibold text-green-700 mt-3">Our Mission</h3>
+        <p className="text-gray-600 mt-2">
+          Integrating **IoT sensors, AI, and weather data** to help farmers **optimize water management, pest control, and resource efficiency**.
+        </p>
+      </motion.div>
+    </div>
+  </section>
+</HomeContainer>
+
 
         {/* Key Statistics */}
         <div className="mt-8 p-6 bg-green-700 text-white text-center rounded-lg shadow-lg w-full">
@@ -351,10 +377,8 @@ const Home = () => {
             </button>
           )}
         </div>
-      </div>
-    </section>
-
-</HomeContainer>
+    
+  
 
 {/* Service Section */}
 <section className="py-16 bg-gray-100">
@@ -601,9 +625,10 @@ const Home = () => {
 
 
     </div>
+ 
+</motion.div>
   );
 };
-
 export default Home;
 // Styled Components for About Section
 const HomeContainer = styled.div`
